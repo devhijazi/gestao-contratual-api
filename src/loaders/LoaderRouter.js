@@ -4,7 +4,7 @@ const Controllers = require('require-dir')('../router/controllers');
 
 module.exports = class LoaderRouter extends Loader {
     constructor(server){
-        super('LoaderRouter/Rotas',server)
+        super('LoaderRouter',server)
     }
     async load(){
         this.client.controllers = await this.initRouter()
@@ -16,7 +16,7 @@ module.exports = class LoaderRouter extends Loader {
         .register()
         .then(controllers =>{
             this.client.log(
-                `Executados "${controllers.length}" de "${Object.values(Controllers).length}" Controladores`,{tags:['ROUTER/ROTAS']}
+                `Executados "[${controllers.length}]" de "[${Object.values(Controllers).length}]" Controladores`,{tags:['ROUTER']}
             )
             return true;
         })

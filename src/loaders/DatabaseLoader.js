@@ -4,7 +4,7 @@ const MongoDb = require('../database/MongoDB.js');
 
 module.exports = class DatabaseLoader extends Loader {
     constructor(server) {
-        super('DatabaseLoader/Banco de Dados', server)
+        super('DatabaseLoader', server)
 
 
         this.database = new MongoDb()

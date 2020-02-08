@@ -32,7 +32,7 @@ module.exports = class Server extends ServerLogs {
             .use(bodyParser.json())
             .use(cookies.express(['some', 'random', 'keys']))
             .unsubscribe(bodyParser.urlencoded({ extended: true }))
-            .listen(PORT, () => this.log(`Escutando na porta "${PORT}"`, { tags: ['LISTEN/ESCUTANDO'] }))
+            .listen(PORT, () => this.log(`Escutando na porta "${PORT}"`, { tags: ['LISTEN'] }))
 
         return true
     }
@@ -43,7 +43,7 @@ module.exports = class Server extends ServerLogs {
                     loader = new loader(this);
                     await loader
                         .load()
-                        .then(() => this.log('Módulos executados com sucesso!', { tags: ['LOADERS/CARREGADORES', loader.name] }))
+                        .then(() => this.log('Módulos executados com sucesso!', { tags: ['LOADERS', loader.name] }))
                 }catch(err){
                     this.log(true, err.stack || err, {tags: ['LOADERS', loader.name]}) // mostra o erro do loader
                 }
