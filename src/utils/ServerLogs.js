@@ -18,7 +18,7 @@ module.exports = class ServerLogs {
                 tokens.res(req, res, 'content-length'), '-', 'B', '-', 'Handled in',
                 tokens['response-time'](req, res), 'ms'
             ].join(' ')
-        })
+        })(req,res,next)
     }
     /**
      * @param{bollean} error

@@ -14,7 +14,7 @@ module.exports = class DashBoardController extends Controller {
         router.use(authorizationMiddleware);
 
 
-        router.get('/user/:id', async (req, res) => {
+        router.get('/:id', async (req, res) => {
             const { id } = req.params;
             const user = await this.getUser({ integrations: { $elemMatch: { name: 'Google', 'integration.userId': id } } });
 
@@ -23,8 +23,8 @@ module.exports = class DashBoardController extends Controller {
 
         router.post('/register', async (req, res) => {
             try {
-                const { email, integration, password, username, createdBy } = req.body
-                const user = await this.saveUser({ email, integration, password, username, createdBy });
+                const { email, integration, password, username} = req.body
+                const user = await this.saveUser({ email, integration, password, username });
 
                 if (!user) res.status(400).json({ error: 'hasUser' });
 

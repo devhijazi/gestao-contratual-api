@@ -18,10 +18,6 @@ const changeLogsSchema = new Schema({
   })
   
   const accountSchema = new Schema({
-    createdBy: {
-      type: String,
-      required: true
-    },
     createdAt: {
       type: Date,
       default: Date.now()
@@ -74,14 +70,9 @@ const changeLogsSchema = new Schema({
       type: String,
       select: false
     },
-    description:{
-      type:String,
-      required:true
-    },
     account: accountSchema,
     integrations: [integrationSchema],
     tokens: [tokenSchema]
-
   })
   userSchema.pre('save', async function (next) {
     if(!this.password) return next()
