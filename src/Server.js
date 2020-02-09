@@ -19,7 +19,7 @@ module.exports = class Server extends ServerLogs {
     initApi() {
         const promises = ['openServer', 'initLoaders'];
         return Promise.all(promises.map(promise => this[promise] && this[promise]()))
-
+//oi
     }
     openServer() {
         const PORT = process.env.PORT || 5000;
