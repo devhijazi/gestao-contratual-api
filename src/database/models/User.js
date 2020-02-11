@@ -74,6 +74,7 @@ const changeLogsSchema = new Schema({
     integrations: [integrationSchema],
     tokens: [tokenSchema]
   })
+  
   userSchema.pre('save', async function (next) {
     if(!this.password) return next()
     

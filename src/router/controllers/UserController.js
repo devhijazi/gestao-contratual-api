@@ -1,7 +1,5 @@
 const { Router } = require('express');
-
 const Controller = require('../../structures/Controller.js');
-
 const authorizationMiddleware = require('../middlewares/needAuthorization.js')
 
 module.exports = class DashBoardController extends Controller {
