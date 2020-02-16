@@ -6,10 +6,11 @@ module.exports = (req,res,next) =>{
 
     if(!token) return res.status(401).json({ok: false, error:'Unauthorized'});
 
-    jwt.verify(token, process.env.JWT_SECRET, (err,decoded)=>{
+    jwt.verify(token, process.env.JWT_TOKEN, (err,decoded)=>{
         if(err) return res.status(401).json({ok: false, error:'Unauthorized'})
 
-
+        req.token = token;
+        req.user = decoded;
         next()
     })
 }
