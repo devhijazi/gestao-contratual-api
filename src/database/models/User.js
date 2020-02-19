@@ -6,29 +6,6 @@ const someIntegrationsNames = {
     'google': 'Google'
 }
 
-const changeLogsSchema = new Schema({
-    state: {
-      type: Date,
-      default: Date.now()
-    },
-    log: {
-      type: String,
-      required: true,
-    }
-  })
-  
-  const accountSchema = new Schema({
-    createdAt: {
-      type: Date,
-      default: Date.now()
-    },
-    lastChange: {
-      type: Date,
-      default: Date.now()
-    },
-    changeLogs: [changeLogsSchema]
-  })
-  
   const integrationSchema = new Schema({
     name: {
       type: String,
@@ -40,18 +17,6 @@ const changeLogsSchema = new Schema({
     integration: {
       type: Object,
       required: true
-    }
-  })
-  
-  const tokenSchema = new Schema({
-    createdAt: {
-      type: Date,
-      default: Date.now()
-    },
-    value: {
-      type: String,
-      required: true,
-      select: false
     }
   })
   
@@ -70,9 +35,6 @@ const changeLogsSchema = new Schema({
       type: String,
       select: false
     },
-    account: accountSchema,
-    integrations: [integrationSchema],
-    tokens: [tokenSchema]
   })
   
   userSchema.pre('save', async function (next) {
