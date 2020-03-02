@@ -7,23 +7,4 @@ module.exports = class Controller {
   }
 
   start () {}
-  async saveUser ({ email, integration, password, username, createdBy }) {
-    const hasUser = await this.database.users.findGet({ email })
-
-    if (hasUser) return null
-    else {
-      const registerUser = await this.database.users.add({
-        email,
-        password,
-        username,
-        integrations: integration,
-        account: { createdBy }
-      })
-      return registerUser
-    }
-  }
-
-  getUser (entity) {
-    return this.database.users.findGet(entity)
-  }
 }
