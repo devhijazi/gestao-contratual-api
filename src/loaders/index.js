@@ -1,4 +1,4 @@
-module.exports ={
-    DatabaseLoader: require('./DatabaseLoader.js'),
-    RouterLoader: require('./LoaderRouter.js')
+module.exports = {
+  DatabaseLoader: require('./DatabaseLoader.js'),
+  RouterLoader: require('./LoaderRouter.js')
 }

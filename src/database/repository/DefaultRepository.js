@@ -1,14 +1,13 @@
 module.exports = class DefaultRepository {
-    parse(entity){ }
+  parse (entity) {}
 
-    add(entity) { }
+  add (entity) {}
 
-    findOne(id) { }
+  findOne (id) {}
 
-    findAll() { }
+  findAll () {}
 
-    get(id) { }
+  get (id) {}
 
-    remove(id) { }
-
+  remove (id) {}
 }

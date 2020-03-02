@@ -1,9 +1,9 @@
-const server = require('./src/Server.js');
-const Server = new server();
+const Server = require('./src/Server.js')
+const server = new Server()
 
-Server.initApi();
+server.initApi()
 
 /*
 *Arquivo Main para iniciar api
-*@Author: Gabriel HijaZi 
+*@Author: Gabriel HijaZi
 */
