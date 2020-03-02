@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose')
 
-const infoSchema = new Schema({
+const InfoSchema = new Schema({
   name: String,
   description: String,
   dateStart: Date,
@@ -8,4 +8,4 @@ const infoSchema = new Schema({
   obs: String
 })
 
-module.exports = model('Info', infoSchema)
+module.exports = model('Info', InfoSchema)

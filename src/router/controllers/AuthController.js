@@ -1,10 +1,11 @@
 const { Router } = require('express')
-const Controller = require('../../structures/Controller.js')
 const jwt = require('jsonwebtoken')
 
-module.exports = class AdminController extends Controller {
+const Controller = require('../../structures/Controller.js')
+
+module.exports = class AuthController extends Controller {
   constructor (app) {
-    super(app, 'AdminContoller')
+    super(app, 'AuthController')
   }
 
   start () {
@@ -15,7 +16,6 @@ module.exports = class AdminController extends Controller {
       if (!(email && password)) return res.status(400).json({})
 
       const database = this.database
-      console.log(await database.admins.findAll())
       const hasAdmin = await database.admins.findGet({ email, password })
       if (!hasAdmin) return res.status(401).json({})
 
@@ -23,6 +23,7 @@ module.exports = class AdminController extends Controller {
         token: jwt.sign({ user: hasAdmin }, process.env.JWT_TOKEN)
       })
     })
+
     return this.app.use('/auth', router)
   }
 }
