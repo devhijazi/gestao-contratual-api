@@ -1,5 +1,4 @@
 const Loader = require('../structures/Loader.js')
-
 const MongoDb = require('../database/MongoDB.js')
 
 module.exports = class DatabaseLoader extends Loader {
@@ -13,12 +12,6 @@ module.exports = class DatabaseLoader extends Loader {
     this.client.database = await this.database.connect().then(db => {
       this.app.database = db
     })
-    /*
-    this.database.admins.add({
-      email: "hijazi.root@gmail.com",
-      password: "admin123"
-    });
-    */
     return true
   }
 }

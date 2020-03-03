@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
-const userSchema = require('./models/User.js')
-const AdminSchema = require('./models/Admin.js')
-const InfoSchema = require('./models/Info.js')
+
 const Repository = require('./repository/Repository.js')
+
+const ContractSchema = require('./models/Contract.js')
+const AdminSchema = require('./models/Admin.js')
 
 // CONECTA AO BANCO DE DADOS
 
@@ -20,9 +21,8 @@ module.exports = class MongoDB {
         useUnifiedTopology: true
       })
       .then(m => {
-        this.users = new Repository(m, userSchema)
         this.admins = new Repository(m, AdminSchema)
-        this.infos = new Repository(m, InfoSchema)
+        this.contracts = new Repository(m, ContractSchema)
         return this
       })
   }
