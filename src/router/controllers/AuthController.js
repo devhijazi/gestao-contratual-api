@@ -16,11 +16,12 @@ module.exports = class AuthController extends Controller {
       if (!(email && password)) return res.status(400).json({})
 
       const database = this.database
-      const hasAdmin = await database.admins.findGet({ email, password })
-      if (!hasAdmin) return res.status(401).json({})
+      const admin = await database.admins.findGet({ email, password })
+      if (!admin) return res.status(401).json({})
 
       return res.json({
-        token: jwt.sign({ user: hasAdmin }, process.env.JWT_TOKEN)
+        token: jwt.sign({ user: admin }, process.env.JWT_TOKEN),
+        user: admin
       })
     })
 
