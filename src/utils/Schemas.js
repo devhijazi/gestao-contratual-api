@@ -12,7 +12,6 @@ exports.ContractSchema = Joi.object().keys({
     .required()
     .messages({ 'any.required': 'Descrição é obrigatório!' }),
   name: Joi.string()
-    .alphanum()
     .min(5)
     .max(50)
     .required()
