@@ -39,6 +39,7 @@ module.exports = class ContractController extends Controller {
         })
         return res.json({ ok: true })
       } catch (e) {
+        console.log(e)
         return res.status(403).json({ error: 'Missing content' })
       }
     })
