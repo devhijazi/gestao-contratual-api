@@ -18,11 +18,8 @@ module.exports = class ContractController extends Controller {
     router.use(authorizationMiddleware)
 
     router.post('/', async (req, res) => {
-
-      
       const { name, description, email, finalAt, ...rest } = req.body
-      
-
+      console.log(req.body)
       try {
         const { error, value } = await ContractSchema.validate({
           name,
@@ -30,8 +27,6 @@ module.exports = class ContractController extends Controller {
           description,
           finalAt
         })
-        console.log(req.body);
-       
         if (error) {
           const errorMessage = error.details[0].message.replace(/"/g, "'")
           return res.status(400).json({ error: errorMessage })
