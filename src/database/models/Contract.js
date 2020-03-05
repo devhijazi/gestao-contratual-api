@@ -13,8 +13,8 @@ const ContractSchema = new Schema({
   },
   email: {
     type: String,
-    required: true,
-    lowercase: true
+    lowercase: true,
+    unique: false
   },
   createdAt: {
     type: Date,
