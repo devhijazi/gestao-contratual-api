@@ -19,7 +19,7 @@ module.exports = class ContractController extends Controller {
 
     router.post('/', async (req, res) => {
       const { name, description, email, finalAt, ...rest } = req.body
-      console.log(req.body)
+
       try {
         const { error, value } = await ContractSchema.validate({
           name,
