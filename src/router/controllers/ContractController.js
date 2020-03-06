@@ -17,6 +17,11 @@ module.exports = class ContractController extends Controller {
 
     router.use(authorizationMiddleware)
 
+    router.get('/', async (req, res) => {
+      const contracts = await database.findAll()
+      return res.json({ contracts })
+    })
+
     router.post('/', async (req, res) => {
       const { name, description, email, finalAt, ...rest } = req.body
 
@@ -39,11 +44,10 @@ module.exports = class ContractController extends Controller {
         })
         return res.json({ ok: true })
       } catch (e) {
-        console.log(e)
         return res.status(403).json({ error: 'Missing content' })
       }
     })
 
-    return this.app.use('/contract', router)
+    return this.app.use('/contracts', router)
   }
 }
