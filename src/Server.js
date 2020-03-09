@@ -1,7 +1,5 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const cookies = require('cookies')
-const cookieParser = require('cookie-parser')
 const cors = require('cors')
 
 const { Loaders, Loader, ServerLogs } = require('./')
@@ -28,10 +26,8 @@ module.exports = class Server extends ServerLogs {
 
     this.app
       .use(cors())
-      .use(this.morganLog)
-      .use(cookieParser())
       .use(bodyParser.json())
-      .use(cookies.express(['some', 'random', 'keys']))
+      .use(this.morganLog)
       .unsubscribe(bodyParser.urlencoded({ extended: true }))
       .listen(PORT, () =>
         this.log(`Escutando na porta "${PORT}"`, { tags: ['LISTEN'] })

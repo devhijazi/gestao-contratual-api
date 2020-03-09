@@ -7,7 +7,9 @@ module.exports = class MongoRepository extends DefaultRepository {
   constructor (mongoose, model) {
     super()
 
-    if (!mongoose || !model) { throw new Error('Modelo do banco de dados não pode ser nulo.') }
+    if (!mongoose || !model) {
+      throw new Error('Modelo do banco de dados não pode ser nulo.')
+    }
 
     this.mongoose = mongoose
     this.model = model
@@ -44,7 +46,7 @@ module.exports = class MongoRepository extends DefaultRepository {
   }
 
   remove (id) {
-    return this.model.findByIdAndRemove(id).then(this.parse)
+    return this.model.deleteOne({ _id: id })
   }
 
   update (id, entity, options = { upsert: true }) {

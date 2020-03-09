@@ -47,7 +47,52 @@ module.exports = class ContractController extends Controller {
         return res.status(403).json({ error: 'Missing content' })
       }
     })
+    router.delete('/:contractID', async (req, res) => {
+      const id = req.params.contractID
+      console.log(id)
+      try {
+        if (!id) {
+          return res.status(400).json({ error: 'Missing content' })
+        }
+        await database.remove(id)
+        console.log('Deletado com sucesso')
+        return res.status(200).json('Contrato deletado com sucesso')
+      } catch (e) {
+        console.log(e)
+      }
+    })
 
+    router.put('/:contractID', async (req, res) => {
+      const id = req.params.contractID
+      const form = req.body
+      console.log(id)
+      try {
+        if (!id) {
+          return req.status(400).json({ error: 'Missing Content' })
+        }
+        const { name, email, finalAt, description, ...rest } = form
+        console.log(form)
+
+        const { error, value } = await ContractSchema.validate({
+          name,
+          email,
+          finalAt,
+          description
+        })
+        if (error) {
+          const errorMessage = error.details[0].message.replace(/"/g, "'")
+          return res.status(400).json({ error: errorMessage })
+        }
+        const contract = await database.findOne(id)
+        if (!contract) { return res.status(400).json({ error: 'No contract in database' }) }
+        await database.update(id, {
+          ...rest,
+          ...value
+        })
+      } catch (e) {
+        return res.status(403).json({ error: 'Missing content' })
+      }
+    })
     return this.app.use('/contracts', router)
   }
 }

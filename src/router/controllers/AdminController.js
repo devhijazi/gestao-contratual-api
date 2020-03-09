@@ -7,11 +7,11 @@ const { AdminSchema } = require('../../utils/Schemas.js')
 const authorizationMiddleware = require('../middlewares/hasLogged.js')
 
 module.exports = class AdminController extends Controller {
-  constructor(app) {
+  constructor (app) {
     super(app, 'AdminController')
   }
 
-  start() {
+  start () {
     const router = Router()
     const database = this.database.admins
 
