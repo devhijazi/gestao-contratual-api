@@ -15,15 +15,6 @@ module.exports = class AdminController extends Controller {
     const router = Router()
     const database = this.database.admins
 
-    router.use(authorizationMiddleware)
-
-    router.get('/@me', async (req, res) => {
-      const user = await database.findOne({ _id: req.user.user._id })
-      if (!user) return res.status(400).json()
-
-      return res.json({ user })
-    })
-
     router.post('/', async (req, res) => {
       const { email, name, password, ...rest } = req.body
 
@@ -45,6 +36,16 @@ module.exports = class AdminController extends Controller {
       } catch (e) {
         return res.status(403).json({ error: 'Missing content' })
       }
+    })
+
+    // Verifica se ta autenticado
+    router.use(authorizationMiddleware)
+
+    router.get('/@me', async (req, res) => {
+      const user = await database.findOne({ _id: req.user.user._id })
+      if (!user) return res.status(400).json()
+
+      return res.json({ user })
     })
 
     return this.app.use('/admin', router)
