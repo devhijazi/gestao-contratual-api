@@ -19,7 +19,7 @@ module.exports = class AdminController extends Controller {
       const { email, name, password, ...rest } = req.body
 
       try {
-        const { error, value } = await AdminSchema.validate({
+        const { error, value } = AdminSchema.validate({
           email,
           name,
           password

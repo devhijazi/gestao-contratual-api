@@ -18,16 +18,17 @@ module.exports = class ContractController extends Controller {
     router.use(authorizationMiddleware)
 
     // Router get lista todos os contratos adicionados na database
-    router.get('/', async (req, res) => {
+    router.get('/', async (_, res) => {
       const contracts = await database.findAll()
       return res.json({ contracts })
     })
+
     // Router post adiciona um novo contrato na database
     router.post('/', async (req, res) => {
       const { name, description, email, finalAt, ...rest } = req.body
 
       try {
-        const { error, value } = await ContractSchema.validate({
+        const { error, value } = ContractSchema.validate({
           name,
           email,
           description,
@@ -48,6 +49,21 @@ module.exports = class ContractController extends Controller {
         return res.status(403).json({ error: 'An error has ocurred' })
       }
     })
+
+    router.get('/:contractID', async (req, res) => {
+      const id = req.params.contractID
+
+      try {
+        if (!id) return res.status(400).json({ error: 'Missing content' })
+
+        const contract = await database.findOne(id)
+        if (!contract) return res.json({ error: 'No contract in database' })
+        return res.json({ contract })
+      } catch (e) {
+        return res.status(403).json({ error: 'An error has ocurred' })
+      }
+    })
+
     // deleta um contrato usando o ID
     router.delete('/:contractID', async (req, res) => {
       const id = req.params.contractID
@@ -61,6 +77,7 @@ module.exports = class ContractController extends Controller {
         return res.status(403).json({ error: 'An error has ocurred' })
       }
     })
+
     // edita as informações do contrato
     router.put('/:contractID', async (req, res) => {
       const id = req.params.contractID
