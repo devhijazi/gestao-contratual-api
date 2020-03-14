@@ -7,6 +7,7 @@ const { ContractSchema } = require('../../utils/Schemas.js')
 const authorizationMiddleware = require('../middlewares/hasLogged.js')
 
 const MAX_CONTRACTS_PAGE = 18
+const DAYS_MS = 2592000000
 
 module.exports = class ContractController extends Controller {
   constructor (app) {
@@ -24,7 +25,9 @@ module.exports = class ContractController extends Controller {
       const page = Number(req.query.page)
 
       const contracts = await database.findAll()
-      const contractsMaxPage = parseInt(contracts.length / MAX_CONTRACTS_PAGE)
+      const pages = parseInt(contracts.length / MAX_CONTRACTS_PAGE)
+      const contractsMaxPage =
+        contracts.length === MAX_CONTRACTS_PAGE ? 0 : pages
 
       const inPage = parseInt(
         (!isNaN(page) && page <= contractsMaxPage && page) || 0
@@ -38,6 +41,30 @@ module.exports = class ContractController extends Controller {
           .slice(MAX_CONTRACTS_PAGE * inPage)
           .slice(0, MAX_CONTRACTS_PAGE)
       })
+    })
+
+    router.get('/due', async (_, res) => {
+      const contracts = await database
+        .findAll()
+        .then(contracts =>
+          contracts.filter(contract => Date.now() + DAYS_MS >= contract.finalAt)
+        )
+
+      return res.json({ contracts })
+    })
+
+    router.get('/:contractID', async (req, res) => {
+      const id = req.params.contractID
+
+      try {
+        if (!id) return res.status(400).json({ error: 'Missing content' })
+
+        const contract = await database.findOne(id)
+        if (!contract) return res.json({ error: 'No contract in database' })
+        return res.json({ contract })
+      } catch (e) {
+        return res.status(403).json({ error: 'An error has ocurred' })
+      }
     })
 
     // Router post adiciona um novo contrato na database
@@ -62,20 +89,6 @@ module.exports = class ContractController extends Controller {
           createdBy: req.user._id
         })
         return res.json({ ok: true })
-      } catch (e) {
-        return res.status(403).json({ error: 'An error has ocurred' })
-      }
-    })
-
-    router.get('/:contractID', async (req, res) => {
-      const id = req.params.contractID
-
-      try {
-        if (!id) return res.status(400).json({ error: 'Missing content' })
-
-        const contract = await database.findOne(id)
-        if (!contract) return res.json({ error: 'No contract in database' })
-        return res.json({ contract })
       } catch (e) {
         return res.status(403).json({ error: 'An error has ocurred' })
       }
