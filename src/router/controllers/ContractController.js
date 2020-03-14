@@ -22,35 +22,21 @@ module.exports = class ContractController extends Controller {
 
     // Router get lista todos os contratos adicionados na database
     router.get('/', async (req, res) => {
-      const page = Number(req.query.page)
-
       const contracts = await database.findAll()
-      const pages = parseInt(contracts.length / MAX_CONTRACTS_PAGE)
-      const contractsMaxPage =
-        contracts.length === MAX_CONTRACTS_PAGE ? 0 : pages
+      const parsedContracts = this.parseContracts(contracts, req)
 
-      const inPage = parseInt(
-        (!isNaN(page) && page <= contractsMaxPage && page) || 0
-      )
-
-      return res.json({
-        inPage,
-        pages: contractsMaxPage,
-        lenght: contracts.length,
-        contracts: contracts
-          .slice(MAX_CONTRACTS_PAGE * inPage)
-          .slice(0, MAX_CONTRACTS_PAGE)
-      })
+      return res.json(parsedContracts)
     })
 
-    router.get('/due', async (_, res) => {
+    router.get('/due', async (req, res) => {
       const contracts = await database
         .findAll()
         .then(contracts =>
           contracts.filter(contract => Date.now() + DAYS_MS >= contract.finalAt)
         )
+      const parsedContracts = this.parseContracts(contracts, req)
 
-      return res.json({ contracts })
+      return res.json(parsedContracts)
     })
 
     router.get('/:contractID', async (req, res) => {
@@ -69,14 +55,15 @@ module.exports = class ContractController extends Controller {
 
     // Router post adiciona um novo contrato na database
     router.post('/', async (req, res) => {
-      const { name, description, email, finalAt, ...rest } = req.body
+      const { name, description, email, finalAt, createdAt, ...rest } = req.body
 
       try {
         const { error, value } = ContractSchema.validate({
           name,
           email,
           description,
-          finalAt
+          finalAt,
+          createdAt
         })
         if (error) {
           const errorMessage = error.details[0].message.replace(/"/g, "'")
@@ -116,13 +103,14 @@ module.exports = class ContractController extends Controller {
       try {
         if (!id) return req.status(400).json({ error: 'Missing Content' })
 
-        const { name, email, finalAt, description, ...rest } = form
+        const { name, email, finalAt, description, createdAt, ...rest } = form
 
-        const { error, value } = await ContractSchema.validate({
+        const { error, value } = ContractSchema.validate({
           name,
           email,
           finalAt,
-          description
+          description,
+          createdAt
         })
         if (error) {
           const errorMessage = error.details[0].message.replace(/"/g, "'")
@@ -145,5 +133,25 @@ module.exports = class ContractController extends Controller {
     })
 
     return this.app.use('/contracts', router)
+  }
+
+  parseContracts (contracts, req) {
+    const page = Number(req.query.page)
+
+    const pages = parseInt(contracts.length / MAX_CONTRACTS_PAGE)
+    const contractsMaxPage = contracts.length === MAX_CONTRACTS_PAGE ? 0 : pages
+
+    const inPage = parseInt(
+      (!isNaN(page) && page <= contractsMaxPage && page) || 0
+    )
+
+    return {
+      inPage,
+      pages: contractsMaxPage,
+      lenght: contracts.length,
+      contracts: contracts
+        .slice(MAX_CONTRACTS_PAGE * inPage)
+        .slice(0, MAX_CONTRACTS_PAGE)
+    }
   }
 }

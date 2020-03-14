@@ -26,4 +26,10 @@ const ContractSchema = new Schema({
   }
 })
 
+ContractSchema.pre('save', next => {
+  this.createdAt = (this.createdAt && new Date(this.createdAt)) || new Date()
+  this.finalAt = new Date(this.createdAt)
+  next()
+})
+
 module.exports = model('Contract', ContractSchema)
