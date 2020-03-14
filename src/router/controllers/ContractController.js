@@ -7,7 +7,7 @@ const { ContractSchema } = require('../../utils/Schemas.js')
 const authorizationMiddleware = require('../middlewares/hasLogged.js')
 
 const MAX_CONTRACTS_PAGE = 18
-const DAYS_MS = 2592000000
+const DAYS_MS = 2678400000
 
 module.exports = class ContractController extends Controller {
   constructor (app) {
