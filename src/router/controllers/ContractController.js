@@ -6,6 +6,8 @@ const { ContractSchema } = require('../../utils/Schemas.js')
 
 const authorizationMiddleware = require('../middlewares/hasLogged.js')
 
+const MAX_CONTRACTS_PAGE = 18
+
 module.exports = class ContractController extends Controller {
   constructor (app) {
     super(app, 'ContractController')
@@ -18,9 +20,24 @@ module.exports = class ContractController extends Controller {
     router.use(authorizationMiddleware)
 
     // Router get lista todos os contratos adicionados na database
-    router.get('/', async (_, res) => {
+    router.get('/', async (req, res) => {
+      const page = Number(req.query.page)
+
       const contracts = await database.findAll()
-      return res.json({ contracts })
+      const contractsMaxPage = parseInt(contracts.length / MAX_CONTRACTS_PAGE)
+
+      const inPage = parseInt(
+        (!isNaN(page) && page <= contractsMaxPage && page) || 0
+      )
+
+      return res.json({
+        inPage,
+        pages: contractsMaxPage,
+        lenght: contracts.length,
+        contracts: contracts
+          .slice(MAX_CONTRACTS_PAGE * inPage)
+          .slice(0, MAX_CONTRACTS_PAGE)
+      })
     })
 
     // Router post adiciona um novo contrato na database
