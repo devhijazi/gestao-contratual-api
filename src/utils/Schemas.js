@@ -8,6 +8,7 @@ exports.ContractSchema = Joi.object().keys({
   finalAt: Joi.date()
     .required()
     .messages({ 'any.required': 'Final do contrato é obrigatório!' }),
+  createdAt: Joi.date(),
   description: Joi.string()
     .required()
     .messages({ 'any.required': 'Descrição é obrigatório!' }),
