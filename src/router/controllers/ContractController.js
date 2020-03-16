@@ -148,7 +148,7 @@ module.exports = class ContractController extends Controller {
     return {
       inPage,
       pages: contractsMaxPage,
-      lenght: contracts.length,
+      length: contracts.length,
       contracts: contracts
         .slice(MAX_CONTRACTS_PAGE * inPage)
         .slice(0, MAX_CONTRACTS_PAGE)
